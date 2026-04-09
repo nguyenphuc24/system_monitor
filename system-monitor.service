@@ -1,0 +1,13 @@
+[Unit]
+Description=System Monitor Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/home/your_user/system-monitor/monitor.sh
+Restart=always
+RestartSec=5
+User=your_user
+
+[Install]
+WantedBy=multi-user.target
