@@ -14,39 +14,47 @@ fi
 
 source "$SCRIPT_DIR/config.sh"
 source "$SCRIPT_DIR/alert.sh"
-
-TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
-LOG_FILE="$SCRIPT_DIR/logs/monitor.log"
-
-mkdir -p "$SCRIPT_DIR/logs"
+source "$SCRIPT_DIR/utils.sh"
 
 
-# CPU (%)
-CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print 100 - $8}')
-CPU=$(printf "%.2f" "$CPU")
-
-# RAM (%)
-RAM=$(free | awk '/Mem/ {printf("%.2f"), $3/$2 * 100}')
-
-# DISK (%)
-DISK=$(df / | awk 'NR==2 {print $5}' | sed 's/%//')
-
-# TOP 5 PROCESSES
-TOP_PROCS=$(ps -eo pid,comm,%cpu,%mem --sort=-%cpu | head -n 6)
-echo "$TIMESTAMP | CPU:${CPU}% RAM:${RAM}% DISK:${DISK}%" >> "$LOG_FILE"
+INTERVAL=3        # check mỗi 5 giây
+COOLDOWN=60       # chỉ alert 1 lần mỗi 60s
 
 
-# CPU
-if (( $(echo "$CPU > $CPU_THRESHOLD" | bc -l) )); then
-    send_alert "CPU" "CRITICAL" "Usage ${CPU}% (threshold ${CPU_THRESHOLD}%)"
-fi
+while true; do
+    TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
 
-# RAM
-if (( $(echo "$RAM > $RAM_THRESHOLD" | bc -l) )); then
-    send_alert "RAM" "CRITICAL" "Usage ${RAM}% (threshold ${RAM_THRESHOLD}%)"
-fi
+    # CPU (%)
+    CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print 100 - $8}')
+    CPU=$(printf "%.2f" "$CPU")
+    # RAM (%)
+    RAM=$(free | awk '/Mem/ {printf("%.2f"), $3/$2 * 100}')
+    # DISK (%)
+    DISK=$(df / | awk 'NR==2 {print $5}' | sed 's/%//')
+    echo "$TIMESTAMP | CPU:${CPU}% RAM:${RAM}% DISK:${DISK}%" >> "$LOG_FILE"
 
-# DISK
-if (( DISK > DISK_THRESHOLD )); then
-    send_alert "DISK" "CRITICAL" "Usage ${DISK}% (threshold ${DISK_THRESHOLD}%)"
-fi
+
+    # CPU
+    if (( $(echo "$CPU > $CPU_THRESHOLD" | bc -l) )); then
+        if should_alert "CPU"; then
+            send_alert "CPU" "CRITICAL" "Usage ${CPU}% (threshold ${CPU_THRESHOLD}%)"
+        fi
+    fi
+
+    # RAM
+    if (( $(echo "$RAM > $RAM_THRESHOLD" | bc -l) )); then
+        if should_alert "RAM"; then
+            send_alert "RAM" "CRITICAL" "Usage ${RAM}% (threshold ${RAM_THRESHOLD}%)"
+        fi
+    fi
+
+    # DISK
+    if (( DISK > DISK_THRESHOLD )); then
+        if should_alert "DISK"; then
+            send_alert "DISK" "CRITICAL" "Usage ${DISK}% (threshold ${DISK_THRESHOLD}%)"
+        fi
+    fi
+
+
+    sleep $INTERVAL
+done
