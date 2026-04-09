@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/home/your_user/system-monitor/monitor.sh
+ExecStart=/home/your_user/system_monitor/monitor.sh
 Restart=always
 RestartSec=5
 User=your_user

@@ -36,7 +36,7 @@ sudo apt install curl bc -y
 
 ```bash
 git clone <repo_url>
-cd system-monitor
+cd system_monitor
 ```
 
 ---
@@ -120,7 +120,7 @@ curl https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates
 Mở file service:
 
 ```bash
-sudo nano /etc/systemd/system/system-monitor.service
+sudo nano /etc/systemd/system/system_monitor.service
 ```
 
 ---
@@ -128,7 +128,7 @@ sudo nano /etc/systemd/system/system-monitor.service
 ### 📌 Sửa các dòng sau:
 
 ```ini
-ExecStart=/full/path/to/system-monitor/monitor.sh
+ExecStart=/full/path/to/system_monitor/monitor.sh
 User=your_username
 ```
 
@@ -137,7 +137,7 @@ User=your_username
 ### 🔥 Ví dụ:
 
 ```ini
-ExecStart=/home/ubuntu/system-monitor/monitor.sh
+ExecStart=/home/ubuntu/system_monitor/monitor.sh
 User=ubuntu
 ```
 
@@ -147,8 +147,8 @@ User=ubuntu
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable system-monitor
-sudo systemctl start system-monitor
+sudo systemctl enable system_monitor
+sudo systemctl start system_monitor
 ```
 
 ---
@@ -158,7 +158,7 @@ sudo systemctl start system-monitor
 ### Trạng thái:
 
 ```bash
-systemctl status system-monitor
+systemctl status system_monitor
 ```
 
 ---
@@ -166,7 +166,7 @@ systemctl status system-monitor
 ### Xem log realtime:
 
 ```bash
-journalctl -u system-monitor -f
+journalctl -u system_monitor -f
 ```
 
 ---
@@ -182,7 +182,7 @@ CPU_THRESHOLD=1
 Sau đó restart:
 
 ```bash
-sudo systemctl restart system-monitor
+sudo systemctl restart system_monitor
 ```
 
 ---

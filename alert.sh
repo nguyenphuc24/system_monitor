@@ -8,7 +8,7 @@ alert_format(){
     local LEVEL=$1
     local TYPE=$2
     local MESSAGE=$3
-    local TIME_STAMP=$(date '+%Y-%m-&d %H:%M:%S')
+    local TIME_STAMP=$(date '+%Y-%m-%d %H:%M:%S')
 
     echo "[$TIME_STAMP] [$LEVEL] [$TYPE] $MESSAGE"
 } 
