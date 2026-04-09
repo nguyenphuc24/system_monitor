@@ -233,17 +233,3 @@ sudo systemctl daemon-reload
 * chưa vượt threshold
 * thiếu `bc`
 
----
-
-## 🚀 Nâng cấp (gợi ý)
-
-* Thêm alert recovery (OK state)
-* Dashboard Grafana
-* Prometheus exporter
-* Docker hóa project
-
----
-
-## 👨‍💻 Tác giả
-
-DevOps learning project 🚀
